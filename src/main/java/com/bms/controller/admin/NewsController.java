@@ -14,8 +14,11 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 资讯管理
+ */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/news")
 public class NewsController {
 
     @Resource
@@ -23,20 +26,20 @@ public class NewsController {
     @Resource
     private CategoryService categoryService;
 
-    @GetMapping("/news")
+    @GetMapping
     public String list(HttpServletRequest request) {
         request.setAttribute("path", "news");
         return "admin/news";
     }
 
-    @GetMapping("/news/edit")
+    @GetMapping("/edit")
     public String edit(HttpServletRequest request) {
         request.setAttribute("path", "edit");
         request.setAttribute("categories", categoryService.getAllCategories());
         return "admin/edit";
     }
 
-    @GetMapping("/news/list")
+    @GetMapping("/list")
     @ResponseBody
     public Result list(@RequestParam Map<String, Object> params) {
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
@@ -46,7 +49,7 @@ public class NewsController {
         return ResultGenerator.genSuccessResult(newsService.getNewsPage(pageUtil));
     }
 
-    @PostMapping("/news/save")
+    @PostMapping("/save")
     @ResponseBody
     public Result save(@RequestParam("newsTitle") String newsTitle,
                        @RequestParam("newsCategoryId") Long newsCategoryId,
@@ -82,7 +85,7 @@ public class NewsController {
         }
     }
 
-    @GetMapping("/news/edit/{newsId}")
+    @GetMapping("/edit/{newsId}")
     public String edit(HttpServletRequest request, @PathVariable("newsId") Long newsId) {
         request.setAttribute("path", "edit");
         News news = newsService.queryNewsById(newsId);
@@ -94,7 +97,7 @@ public class NewsController {
         return "admin/edit";
     }
 
-    @PostMapping("/news/update")
+    @PostMapping("/update")
     @ResponseBody
     public Result update(@RequestParam("newsId") Long newsId,
                          @RequestParam("newsTitle") String newsTitle,
@@ -132,7 +135,7 @@ public class NewsController {
         }
     }
 
-    @PostMapping("/news/delete")
+    @PostMapping("/delete")
     @ResponseBody
     public Result delete(@RequestBody Integer[] ids) {
         if (ids.length < 1) {

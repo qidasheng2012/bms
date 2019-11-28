@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '/admin/categories/list',
+        url: '/category/list',
         datatype: "json",
         colModel: [
             {label: 'id', name: 'categoryId', index: 'categoryId', width: 50, key: true, hidden: true},
@@ -64,10 +64,10 @@ $('#saveButton').click(function () {
         $('#edit-error-msg').html("请输入符合规范的分类名称！");
     } else {
         var params = $("#categoryForm").serialize();
-        var url = '/admin/categories/save';
+        var url = '/category/save';
         var id = getSelectedRowWithoutAlert();
         if (id != null) {
-            url = '/admin/categories/update';
+            url = '/category/update';
         }
         $.ajax({
             type: 'POST',//方法类型
@@ -105,7 +105,7 @@ function categoryEdit() {
         return;
     }
     //请求数据
-    $.get("/admin/categories/info/" + id, function (r) {
+    $.get("/category/info/" + id, function (r) {
         if (r.resultCode == 200 && r.data != null) {
             //填充数据至modal
             $('#categoryName').val(r.data.categoryName);
@@ -131,7 +131,7 @@ function deleteCagegory() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/categories/delete",
+                    url: "/category/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {

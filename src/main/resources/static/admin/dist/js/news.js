@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '/admin/news/list',
+        url: '/news/list',
         datatype: "json",
         colModel: [
             {label: 'id', name: 'newsId', index: 'newsId', width: 50, key: true, hidden: true},
@@ -67,7 +67,7 @@ function reload() {
 }
 
 function addNews() {
-    window.location.href = "/admin/news/edit";
+    window.location.href = "/news/edit";
 }
 
 function editNews() {
@@ -75,7 +75,7 @@ function editNews() {
     if (id == null) {
         return;
     }
-    window.location.href = "/admin/news/edit/" + id;
+    window.location.href = "/news/edit/" + id;
 }
 
 function deleteNews() {
@@ -93,7 +93,7 @@ function deleteNews() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/news/delete",
+                    url: "/news/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {

@@ -21,13 +21,13 @@ import java.util.Date;
 import java.util.Random;
 
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/upload")
 public class UploadController {
 
     @Autowired
     private UploadConfig uploadConfig;
 
-    @PostMapping({"/upload/file"})
+    @PostMapping("/file")
     @ResponseBody
     public Result upload(@RequestParam("file") MultipartFile file, HttpServletRequest request) {
         if (file.isEmpty()) {

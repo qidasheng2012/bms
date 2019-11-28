@@ -16,12 +16,12 @@ $(function () {
             'italic', 'underline', 'strikethrough', 'lineheight', 'removeformat', '|', 'multiimage',
             'table', 'hr', 'emoticons', 'baidumap', 'pagebreak',
             'anchor', 'link', 'unlink'],
-        uploadJson: '/admin/upload/file',
+        uploadJson: '/upload/file',
         filePostName: 'file'
     });
 
     new AjaxUpload('#uploadCoverImage', {
-        action: '/admin/upload/file',
+        action: '/upload/file',
         name: 'file',
         autoSubmit: true,
         responseType: "json",
@@ -93,14 +93,14 @@ $('#saveButton').click(function () {
         });
         return;
     }
-    var url = '/admin/news/save';
+    var url = '/news/save';
     var swlMessage = '保存成功';
     var data = {
         "newsTitle": newsTitle,  "newsCategoryId": newsCategoryId,
         "newsContent": newsContent, "newsCoverImage": newsCoverImage, "newsStatus": newsStatus
     };
     if (newsId > 0) {
-        url = '/admin/news/update';
+        url = '/news/update';
         swlMessage = '修改成功';
         data = {
             "newsId": newsId,
@@ -128,7 +128,7 @@ $('#saveButton').click(function () {
                     confirmButtonClass: 'btn btn-success',
                     buttonsStyling: false
                 }).then(function () {
-                    window.location.href = "/admin/news";
+                    window.location.href = "/news";
                 })
             }
             else {
@@ -148,5 +148,5 @@ $('#saveButton').click(function () {
 });
 
 $('#cancelButton').click(function () {
-    window.location.href = "/admin/news";
+    window.location.href = "/news";
 });

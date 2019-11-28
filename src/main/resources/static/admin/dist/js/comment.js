@@ -1,6 +1,6 @@
 $(function () {
     $("#jqGrid").jqGrid({
-        url: '/admin/comments/list',
+        url: '/comment/list',
         datatype: "json",
         colModel: [
             {label: 'id', name: 'commentId', index: 'commentId', width: 50, key: true, hidden: true},
@@ -79,7 +79,7 @@ function checkDoneComments() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/comments/checkDone",
+                    url: "/comment/checkDone",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {
@@ -118,7 +118,7 @@ function deleteComments() {
             if (flag) {
                 $.ajax({
                     type: "POST",
-                    url: "/admin/comments/delete",
+                    url: "/comment/delete",
                     contentType: "application/json",
                     data: JSON.stringify(ids),
                     success: function (r) {

@@ -12,20 +12,23 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 评论管理
+ */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/comment")
 public class CommentController {
 
     @Resource
     private CommentService commentService;
 
-    @GetMapping("/comments")
+    @GetMapping
     public String list(HttpServletRequest request) {
         request.setAttribute("path", "comments");
         return "admin/comment";
     }
 
-    @GetMapping("/comments/list")
+    @GetMapping("/list")
     @ResponseBody
     public Result list(@RequestParam Map<String, Object> params) {
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
@@ -35,7 +38,7 @@ public class CommentController {
         return ResultGenerator.genSuccessResult(commentService.getCommentsPage(pageUtil));
     }
 
-    @PostMapping("/comments/checkDone")
+    @PostMapping("/checkDone")
     @ResponseBody
     public Result checkDone(@RequestBody Integer[] ids) {
         if (ids.length < 1) {
@@ -48,7 +51,7 @@ public class CommentController {
         }
     }
 
-    @PostMapping("/comments/delete")
+    @PostMapping("/delete")
     @ResponseBody
     public Result delete(@RequestBody Integer[] ids) {
         if (ids.length < 1) {

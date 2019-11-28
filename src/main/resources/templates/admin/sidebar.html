@@ -31,7 +31,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/news/edit}" th:class="${path}=='edit'?'nav-link active':'nav-link'">
+                    <a th:href="@{/news/edit}" th:class="${path}=='edit'?'nav-link active':'nav-link'">
                         <i class="nav-icon fa fa fa-pencil-square-o"></i>
                         <p>
                             发布资讯
@@ -40,7 +40,7 @@
                 </li>
                 <li class="nav-header">管理模块</li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/categories}" th:class="${path}=='categories'?'nav-link active':'nav-link'">
+                    <a th:href="@{/category}" th:class="${path}=='categories'?'nav-link active':'nav-link'">
                         <i class="fa fa-bookmark nav-icon" aria-hidden="true"></i>
                         <p>
                             分类管理
@@ -48,7 +48,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/news}" th:class="${path}=='news'?'nav-link active':'nav-link'">
+                    <a th:href="@{/news}" th:class="${path}=='news'?'nav-link active':'nav-link'">
                         <i class="fa fa-list-alt nav-icon" aria-hidden="true"></i>
                         <p>
                             资讯管理
@@ -56,7 +56,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a th:href="@{/admin/comments}" th:class="${path}=='comments'?'nav-link active':'nav-link'">
+                    <a th:href="@{/comment}" th:class="${path}=='comments'?'nav-link active':'nav-link'">
                         <i class="fa fa-comments nav-icon" aria-hidden="true"></i>
                         <p>
                             评论管理

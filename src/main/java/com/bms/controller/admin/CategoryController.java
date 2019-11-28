@@ -13,14 +13,17 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
+/**
+ * 分类管理
+ */
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/category")
 public class CategoryController {
 
     @Resource
     private CategoryService categoryService;
 
-    @GetMapping("/categories")
+    @GetMapping
     public String categoryPage(HttpServletRequest request) {
         request.setAttribute("path", "categories");
         return "admin/category";
@@ -29,7 +32,7 @@ public class CategoryController {
     /**
      * 分类列表
      */
-    @RequestMapping(value = "/categories/list", method = RequestMethod.GET)
+    @GetMapping("/list")
     @ResponseBody
     public Result list(@RequestParam Map<String, Object> params) {
         if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
@@ -42,7 +45,7 @@ public class CategoryController {
     /**
      * 详情
      */
-    @RequestMapping(value = "/categories/info/{id}", method = RequestMethod.GET)
+    @GetMapping("/info/{id}")
     @ResponseBody
     public Result info(@PathVariable("id") Long id) {
         NewsCategory newsCategory = categoryService.queryById(id);
@@ -53,7 +56,7 @@ public class CategoryController {
     /**
      * 分类添加
      */
-    @RequestMapping(value = "/categories/save", method = RequestMethod.POST)
+    @PostMapping("/save")
     @ResponseBody
     public Result save(@RequestParam("categoryName") String categoryName) {
         if (StringUtils.isEmpty(categoryName)) {
@@ -70,7 +73,7 @@ public class CategoryController {
     /**
      * 分类修改
      */
-    @RequestMapping(value = "/categories/update", method = RequestMethod.POST)
+    @PostMapping("/update")
     @ResponseBody
     public Result update(@RequestParam("categoryId") Long categoryId,
                          @RequestParam("categoryName") String categoryName) {
@@ -88,7 +91,7 @@ public class CategoryController {
     /**
      * 分类删除
      */
-    @RequestMapping(value = "/categories/delete", method = RequestMethod.POST)
+    @PostMapping("/delete")
     @ResponseBody
     public Result delete(@RequestBody Integer[] ids) {
         if (ids.length < 1) {

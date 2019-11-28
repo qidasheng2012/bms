@@ -16,10 +16,12 @@ public class SiteWebMvcConfigurer implements WebMvcConfigurer {
     private LoginInterceptor loginInterceptor;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        // 添加一个拦截器，拦截以/admin为前缀的url路径
-        registry.addInterceptor(loginInterceptor).addPathPatterns("/admin/**").excludePathPatterns("/admin/login").excludePathPatterns("/admin/dist/**").excludePathPatterns("/admin/plugins/**");
+        String[] exclidePaths = {"/admin/login", "/admin/dist/**", "/admin/plugins/**", "/common/kaptcha", "/errorPage/**", "/index/css/**", "/index/img/**", "/index/js/**", "/index/plugins/**"};
+        // 添加一个拦截器，拦截所有的url路径
+        registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(exclidePaths);
     }
 
+    // 配置请求映射 请求中 /files/** 会映射到 uploadConfig.getPath()位置
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/files/**").addResourceLocations("file:" + uploadConfig.getPath());
     }
