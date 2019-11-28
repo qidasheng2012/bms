@@ -16,7 +16,8 @@ public class SiteWebMvcConfigurer implements WebMvcConfigurer {
     private LoginInterceptor loginInterceptor;
 
     public void addInterceptors(InterceptorRegistry registry) {
-        String[] exclidePaths = {"/admin/login", "/admin/dist/**", "/admin/plugins/**", "/common/kaptcha", "/errorPage/**", "/index/css/**", "/index/img/**", "/index/js/**", "/index/plugins/**"};
+        // 不拦截的地址
+        String[] exclidePaths = {"/admin/login", "/admin/dist/**", "/admin/plugins/**", "/kaptcha", "/errorPage/**", "/index/css/**", "/index/img/**", "/index/js/**", "/index/plugins/**"};
         // 添加一个拦截器，拦截所有的url路径
         registry.addInterceptor(loginInterceptor).addPathPatterns("/**").excludePathPatterns(exclidePaths);
     }
