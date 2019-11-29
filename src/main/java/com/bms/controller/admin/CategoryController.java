@@ -1,16 +1,18 @@
 package com.bms.controller.admin;
 
-import com.bms.entity.NewsCategory;
-import com.bms.service.INewsCategoryService;
+import com.bms.entity.Category;
+import com.bms.service.ICategoryService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Map;
 
 /**
@@ -21,10 +23,13 @@ import java.util.Map;
 public class CategoryController {
 
     @Resource
-    private INewsCategoryService categoryService;
+    private ICategoryService iCategoryService;
+
+    @Autowired
+    private HttpServletRequest request;
 
     @GetMapping
-    public String categoryPage(HttpServletRequest request) {
+    public String categoryPage() {
         request.setAttribute("path", "categories");
         return "admin/category";
     }
@@ -39,7 +44,7 @@ public class CategoryController {
             return ResultGenerator.genFailResult("参数异常！");
         }
         PageQueryUtil pageUtil = new PageQueryUtil(params);
-        return ResultGenerator.genSuccessResult(categoryService.getCategoryPage(pageUtil));
+        return ResultGenerator.genSuccessResult(iCategoryService.getCategoryPage(pageUtil));
     }
 
     /**
@@ -48,7 +53,7 @@ public class CategoryController {
     @GetMapping("/info/{id}")
     @ResponseBody
     public Result info(@PathVariable("id") Long id) {
-        NewsCategory newsCategory = categoryService.queryById(id);
+        Category newsCategory = iCategoryService.getById(id);
         return ResultGenerator.genSuccessResult(newsCategory);
     }
 
@@ -58,11 +63,14 @@ public class CategoryController {
      */
     @PostMapping("/save")
     @ResponseBody
-    public Result save(@RequestParam("categoryName") String categoryName) {
+    public Result save(String categoryName) {
         if (StringUtils.isEmpty(categoryName)) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        if (categoryService.saveCategory(categoryName)) {
+
+        Category category = Category.builder().categoryName(categoryName).build();
+        boolean saveFlag = iCategoryService.save(category);
+        if (saveFlag) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("分类名称重复");
@@ -75,12 +83,13 @@ public class CategoryController {
      */
     @PostMapping("/update")
     @ResponseBody
-    public Result update(@RequestParam("categoryId") Long categoryId,
-                         @RequestParam("categoryName") String categoryName) {
+    public Result update(@RequestParam("categoryId") Long id, String categoryName) {
         if (StringUtils.isEmpty(categoryName)) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        if (categoryService.updateCategory(categoryId, categoryName)) {
+
+        Category category = Category.builder().id(id).categoryName(categoryName).build();
+        if (iCategoryService.updateById(category)) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("分类名称重复");
@@ -97,7 +106,7 @@ public class CategoryController {
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        if (categoryService.deleteBatchByIds(ids)) {
+        if (iCategoryService.removeByIds(Arrays.asList(ids))) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("删除失败");

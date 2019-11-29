@@ -15,10 +15,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_news_category")
-public class NewsCategory {
+@TableName("t_category")
+public class Category {
     @TableId(type = IdType.AUTO)
-    private Long categoryId;
+    private Long id;
 
     private String categoryName;
 

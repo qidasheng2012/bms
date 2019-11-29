@@ -1,7 +1,7 @@
 package com.bms.controller.admin;
 
 import com.bms.entity.News;
-import com.bms.service.INewsCategoryService;
+import com.bms.service.ICategoryService;
 import com.bms.service.INewsService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.Result;
@@ -24,7 +24,7 @@ public class NewsController {
     @Resource
     private INewsService newsService;
     @Resource
-    private INewsCategoryService categoryService;
+    private ICategoryService categoryService;
 
     @GetMapping
     public String list(HttpServletRequest request) {
@@ -35,7 +35,7 @@ public class NewsController {
     @GetMapping("/edit")
     public String edit(HttpServletRequest request) {
         request.setAttribute("path", "edit");
-        request.setAttribute("categories", categoryService.getAllCategories());
+        request.setAttribute("categories", categoryService.list());
         return "admin/edit";
     }
 
@@ -93,7 +93,7 @@ public class NewsController {
             return "400";
         }
         request.setAttribute("news", news);
-        request.setAttribute("categories", categoryService.getAllCategories());
+        request.setAttribute("categories", categoryService.list());
         return "admin/edit";
     }
 
