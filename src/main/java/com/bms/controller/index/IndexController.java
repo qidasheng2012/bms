@@ -1,25 +1,26 @@
 package com.bms.controller.index;
 
+import com.bms.entity.Comment;
 import com.bms.entity.News;
-import com.bms.entity.NewsComment;
-import com.bms.service.INewsCommentService;
+import com.bms.service.ICommentService;
 import com.bms.service.INewsService;
 import com.bms.util.AntiXssUtils;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
 public class IndexController {
-    @Resource
-    private INewsCommentService commentService;
-    @Resource
+
+    @Autowired
+    private ICommentService commentService;
+    @Autowired
     private INewsService newsService;
 
     /**
@@ -71,10 +72,12 @@ public class IndexController {
         if (commentBody.trim().length() > 200) {
             return ResultGenerator.genFailResult("评论内容过长");
         }
-        NewsComment comment = new NewsComment();
-        comment.setNewsId(newsId);
-        comment.setCommentator(AntiXssUtils.cleanString(commentator));
-        comment.setCommentBody(AntiXssUtils.cleanString(commentBody));
-        return ResultGenerator.genSuccessResult(commentService.addComment(comment));
+
+        Comment comment = Comment.builder()
+                .newsId(newsId)
+                .commentator(AntiXssUtils.cleanString(commentator))
+                .commentBody(AntiXssUtils.cleanString(commentBody))
+                .build();
+        return ResultGenerator.genSuccessResult(commentService.save(comment));
     }
 }

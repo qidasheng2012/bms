@@ -3,7 +3,7 @@ $(function () {
         url: '/comment/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'commentId', index: 'commentId', width: 50, key: true, hidden: true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
             {label: '评论内容', name: 'commentBody', index: 'commentBody', width: 120},
             {label: '评论时间', name: 'createTime', index: 'createTime', width: 60},
             {label: '评论人名称', name: 'commentator', index: 'commentator', width: 60},
@@ -20,15 +20,14 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "data.list",
-            page: "data.currPage",
-            total: "data.totalPage",
-            records: "data.totalCount"
+            root: "data.records",
+            page: "data.current",
+            total: "data.pages",
+            records: "data.total"
         },
         prmNames: {
-            page: "page",
-            rows: "limit",
-            order: "order",
+            page: "current",
+            rows: "size",
         },
         gridComplete: function () {
             //隐藏grid底部滚动条

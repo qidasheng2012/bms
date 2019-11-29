@@ -1,16 +1,18 @@
 package com.bms.controller.admin;
 
-import com.bms.service.INewsCommentService;
-import com.bms.util.PageQueryUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.bms.entity.Comment;
+import com.bms.service.ICommentService;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+import java.util.Arrays;
 
 /**
  * 评论管理
@@ -20,7 +22,7 @@ import java.util.Map;
 public class CommentController {
 
     @Resource
-    private INewsCommentService commentService;
+    private ICommentService iCommentService;
 
     @GetMapping
     public String list(HttpServletRequest request) {
@@ -30,12 +32,17 @@ public class CommentController {
 
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@RequestParam Map<String, Object> params) {
-        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+    public Result list(Long current, Long size) {
+        if (current <= 0 || size <= 0) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        PageQueryUtil pageUtil = new PageQueryUtil(params);
-        return ResultGenerator.genSuccessResult(commentService.getCommentsPage(pageUtil));
+
+        IPage p = new Page(current, size);
+        QueryWrapper<Comment> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().orderByDesc(Comment::getCreateTime);
+        IPage<Comment> iPage = iCommentService.page(p, queryWrapper);
+
+        return ResultGenerator.genSuccessResult(iPage);
     }
 
     @PostMapping("/checkDone")
@@ -44,7 +51,7 @@ public class CommentController {
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        if (commentService.checkDone(ids)) {
+        if (iCommentService.checkDone(ids)) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("审核失败");
@@ -57,7 +64,7 @@ public class CommentController {
         if (ids.length < 1) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        if (commentService.deleteBatch(ids)) {
+        if (iCommentService.removeByIds(Arrays.asList(ids))) {
             return ResultGenerator.genSuccessResult();
         } else {
             return ResultGenerator.genFailResult("刪除失败");

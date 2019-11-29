@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bms.dao.CommentMapper">
+    <resultMap id="BaseResultMap" type="comment">
+        <id column="id" property="id"/>
+        <result column="news_id" property="newsId"/>
+        <result column="commentator" property="commentator"/>
+        <result column="comment_body" property="commentBody"/>
+        <result column="comment_status" property="commentStatus"/>
+        <result column="is_deleted" property="isDeleted"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,
+        news_id,
+        commentator,
+        comment_body,
+        comment_status,
+        is_deleted,
+        create_time
+    </sql>
+
+    <update id="checkDone">
+        update t_comment
+        set comment_status=1 where id in
+        <foreach item="id" collection="ids" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        and comment_status = 0
+    </update>
+
+</mapper>

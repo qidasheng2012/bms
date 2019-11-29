@@ -15,10 +15,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_news_comment")
-public class NewsComment {
+@TableName("t_comment")
+public class Comment {
     @TableId(type = IdType.AUTO)
-    private Long commentId;
+    private Long id;
 
     private Long newsId;
 
@@ -26,9 +26,9 @@ public class NewsComment {
 
     private String commentBody;
 
-    private Byte commentStatus;
+    private Integer commentStatus;
 
-    private Byte isDeleted;
+    private Integer isDeleted;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
