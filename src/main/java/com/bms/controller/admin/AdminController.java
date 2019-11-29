@@ -1,8 +1,8 @@
 package com.bms.controller.admin;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.bms.entity.Admin;
-import com.bms.service.IAdminService;
+import com.bms.entity.User;
+import com.bms.service.IUserService;
 import com.bms.util.MD5Util;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,7 @@ import javax.servlet.http.HttpSession;
 public class AdminController {
 
     @Autowired
-    private IAdminService adminService;
+    private IUserService iUserService;
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -59,14 +59,14 @@ public class AdminController {
             return "admin/login";
         }
 
-        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("login_name", userName);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(User::getUserName, userName);
         String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
-        queryWrapper.eq("login_password", passwordMd5);
-        Admin user = adminService.getOne(queryWrapper);
+        queryWrapper.lambda().eq(User::getPassword, passwordMd5);
+        User user = iUserService.getOne(queryWrapper);
         if (user != null) {
-            session.setAttribute("loginUser", user.getAdminNickName());
-            session.setAttribute("loginUserId", user.getAdminId());
+            session.setAttribute("loginUser", user.getNickName());
+            session.setAttribute("loginUserId", user.getId());
             //session过期时间设置为7200秒 即两小时
             //session.setMaxInactiveInterval(60 * 60 * 2);
             return "redirect:/admin/index";
@@ -79,13 +79,13 @@ public class AdminController {
     @GetMapping("/profile")
     public String profile() {
         Long id = (long) session.getAttribute("loginUserId");
-        Admin user = adminService.getById(id);
+        User user = iUserService.getById(id);
         if (user == null) {
             return "admin/login";
         }
         request.setAttribute("path", "profile");
-        request.setAttribute("loginUserName", user.getLoginName());
-        request.setAttribute("nickName", user.getAdminNickName());
+        request.setAttribute("loginUserName", user.getUserName());
+        request.setAttribute("nickName", user.getNickName());
         return "admin/profile";
     }
 
@@ -97,14 +97,14 @@ public class AdminController {
         }
         Long id = (long) session.getAttribute("loginUserId");
 
-        Admin user = Admin.builder()
-                .loginPassword(MD5Util.MD5Encode(newPassword, "UTF-8"))
+        User user = User.builder()
+                .password(MD5Util.MD5Encode(newPassword, "UTF-8"))
                 .build();
 
-        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("admin_id", id);
-        queryWrapper.eq("login_password", MD5Util.MD5Encode(originalPassword, "UTF-8"));
-        boolean updateFlag = adminService.update(user, queryWrapper);
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(User::getId, id);
+        queryWrapper.lambda().eq(User::getPassword, MD5Util.MD5Encode(originalPassword, "UTF-8"));
+        boolean updateFlag = iUserService.update(user, queryWrapper);
         if (updateFlag) {
             //修改成功后清空session中的数据，前端控制跳转至登录页
             session.removeAttribute("loginUserId");
@@ -124,13 +124,13 @@ public class AdminController {
         }
         Long id = (long) session.getAttribute("loginUserId");
 
-        Admin admin = Admin.builder()
-                .adminId(id)
-                .loginName(loginUserName)
-                .adminNickName(nickName)
+        User admin = User.builder()
+                .id(id)
+                .userName(loginUserName)
+                .nickName(nickName)
                 .build();
 
-        boolean updateFlag = adminService.updateById(admin);
+        boolean updateFlag = iUserService.updateById(admin);
         if (updateFlag) {
             return "success";
         } else {

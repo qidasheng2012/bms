@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_admin_user")
-public class Admin {
+@TableName("t_user")
+public class User {
     @TableId(type = IdType.AUTO)
-    private Long adminId;
+    private Long id;
 
-    private String loginName;
+    private String userName;
 
-    private String loginPassword;
+    private String password;
 
-    private String adminNickName;
+    private String nickName;
 
     private Byte locked;
 }

@@ -1,8 +1,8 @@
 package com.bms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.bms.entity.Admin;
+import com.bms.entity.User;
 
-public interface IAdminService extends IService<Admin> {
+public interface IUserService extends IService<User> {
 
 }
