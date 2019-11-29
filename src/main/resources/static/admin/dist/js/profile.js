@@ -2,19 +2,20 @@ $(function () {
     //修改个人信息
     $('#updateUserNameButton').click(function () {
         $("#updateUserNameButton").attr("disabled",true);
-        var userName = $('#loginUserName').val();
+        var userName = $('#userName').val();
         var nickName = $('#nickName').val();
         if (validUserNameForUpdate(userName, nickName)) {
             //ajax提交数据
             var params = $("#userNameForm").serialize();
             $.ajax({
-                type: "POST",
-                url: "/admin/profile/name",
+                type: "PUT",
+                url: "/user/updateName",
                 data: params,
                 success: function (r) {
                     console.log(r);
                     if (r == 'success') {
                         alert('修改成功');
+                        window.location.href = '/user';
                     } else {
                         alert('修改失败');
                     }
@@ -22,6 +23,7 @@ $(function () {
             });
         }
     });
+
     //修改密码
     $('#updatePasswordButton').click(function () {
         $("#updatePasswordButton").attr("disabled",true);
@@ -30,8 +32,8 @@ $(function () {
         if (validPasswordForUpdate(originalPassword, newPassword)) {
             var params = $("#userPasswordForm").serialize();
             $.ajax({
-                type: "POST",
-                url: "/admin/profile/password",
+                type: "PUT",
+                url: "/user/updatePassword",
                 data: params,
                 success: function (r) {
                     console.log(r);
