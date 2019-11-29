@@ -81,7 +81,7 @@ $('#confirmButton').click(function () {
 });
 
 $('#saveButton').click(function () {
-    var newsId = $('#newsId').val();
+    var id = $('#id').val();
     var newsTitle = $('#newsTitle').val();
     var newsCategoryId = $('#newsCategoryId').val();
     var newsContent = editor.html();
@@ -99,11 +99,11 @@ $('#saveButton').click(function () {
         "newsTitle": newsTitle,  "newsCategoryId": newsCategoryId,
         "newsContent": newsContent, "newsCoverImage": newsCoverImage, "newsStatus": newsStatus
     };
-    if (newsId > 0) {
+    if (id > 0) {
         url = '/news/update';
         swlMessage = '修改成功';
         data = {
-            "newsId": newsId,
+            "id": id,
             "newsTitle": newsTitle,
             "newsCategoryId": newsCategoryId,
             "newsContent": newsContent,

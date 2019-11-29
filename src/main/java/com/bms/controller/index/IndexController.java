@@ -27,11 +27,11 @@ public class IndexController {
      *
      * @return
      */
-    @GetMapping({"/news/{newsId}"})
-    public String detail(HttpServletRequest request, @PathVariable("newsId") Long newsId) {
-        News newsDetail = newsService.queryNewsById(newsId);
-        if (newsDetail != null) {
-            request.setAttribute("newsDetail", newsDetail);
+    @GetMapping({"/news/{id}"})
+    public String detail(HttpServletRequest request, @PathVariable("id") Long id) {
+        News news = newsService.getById(id);
+        if (news != null) {
+            request.setAttribute("newsDetail", news);
         }
         request.setAttribute("pageName", "详情");
         return "index/detail";

@@ -15,10 +15,10 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("tb_news")
+@TableName("t_news")
 public class News {
     @TableId(type = IdType.AUTO)
-    private Long newsId;
+    private Long id;
 
     private String newsTitle;
 
@@ -28,15 +28,16 @@ public class News {
 
     private String newsContent;
 
-    private Byte newsStatus;
+    private Integer newsStatus;
 
     private Long newsViews;
 
-    private Byte isDeleted;
+    private Integer isDeleted;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
 }

@@ -26,8 +26,8 @@
                         <!-- 几个基础的输入框，名称、分类等输入框 -->
                         <form id="form1" onsubmit="return false;">
                             <div class="form-group" style="display:flex;">
-                                <input type="hidden" id="newsId" name="newsId"
-                                       th:value="${news!=null and news.newsId!=null }?${news.newsId}: 0">
+                                <input type="hidden" id="id" name="id"
+                                       th:value="${news!=null and news.id!=null }?${news.id}: 0">
                                 <input type="text" class="form-control col-sm-6" id="newsTitle" name="newsTitle"
                                        placeholder="*请输入文章标题(必填)"
                                        th:value="${news!=null and news.newsTitle!=null }?${news.newsTitle}: ''"
@@ -40,8 +40,8 @@
                                     </th:block>
                                     <th:block th:unless="${null == categories}">
                                         <th:block th:each="c : ${categories}">
-                                            <option th:value="${c.categoryId}" th:text="${c.categoryName}"
-                                                    th:selected="${null !=news and null !=news.newsCategoryId and news.newsCategoryId==c.categoryId} ?true:false">
+                                            <option th:value="${c.id}" th:text="${c.categoryName}"
+                                                    th:selected="${null !=news and null !=news.newsCategoryId and news.newsCategoryId==c.id} ?true:false">
                                                 >
                                             </option>
                                         </th:block>

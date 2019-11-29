@@ -23,5 +23,5 @@ public class User {
 
     private String nickName;
 
-    private Byte locked;
+    private Integer locked;
 }

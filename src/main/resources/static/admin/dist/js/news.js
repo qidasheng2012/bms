@@ -3,7 +3,7 @@ $(function () {
         url: '/news/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'newsId', index: 'newsId', width: 50, key: true, hidden: true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
             {label: '标题', name: 'newsTitle', index: 'newsTitle', width: 140},
             {label: '预览图', name: 'newsCoverImage', index: 'newsCoverImage', width: 120, formatter: coverImageFormatter},
             {label: '浏览量', name: 'newsViews', index: 'newsViews', width: 60},
@@ -21,15 +21,14 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "data.list",
-            page: "data.currPage",
-            total: "data.totalPage",
-            records: "data.totalCount"
+            root: "data.records",
+            page: "data.current",
+            total: "data.pages",
+            records: "data.total"
         },
         prmNames: {
-            page: "page",
-            rows: "limit",
-            order: "order",
+            page: "current",
+            rows: "size",
         },
         gridComplete: function () {
             //隐藏grid底部滚动条
