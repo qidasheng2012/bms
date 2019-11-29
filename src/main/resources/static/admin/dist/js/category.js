@@ -3,7 +3,7 @@ $(function () {
         url: '/category/list',
         datatype: "json",
         colModel: [
-            {label: 'id', name: 'categoryId', index: 'categoryId', width: 50, key: true, hidden: true},
+            {label: 'id', name: 'id', index: 'id', width: 50, key: true, hidden: true},
             {label: '分类名称', name: 'categoryName', index: 'categoryName', width: 240},
             {label: '添加时间', name: 'createTime', index: 'createTime', width: 120}
         ],
@@ -18,15 +18,14 @@ $(function () {
         multiselect: true,
         pager: "#jqGridPager",
         jsonReader: {
-            root: "data.list",
-            page: "data.currPage",
-            total: "data.totalPage",
-            records: "data.totalCount"
+            root: "data.records",
+            page: "data.current",
+            total: "data.pages",
+            records: "data.total"
         },
         prmNames: {
-            page: "page",
-            rows: "limit",
-            order: "order",
+            page: "current",
+            rows: "size",
         },
         gridComplete: function () {
             //隐藏grid底部滚动条

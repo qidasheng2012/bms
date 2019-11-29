@@ -22,7 +22,7 @@ public class Category {
 
     private String categoryName;
 
-    private Byte isDeleted;
+    private Integer isDeleted;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;

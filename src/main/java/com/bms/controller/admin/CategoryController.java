@@ -1,8 +1,10 @@
 package com.bms.controller.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.bms.entity.Category;
 import com.bms.service.ICategoryService;
-import com.bms.util.PageQueryUtil;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Date;
 
 /**
  * 分类管理
@@ -39,12 +41,17 @@ public class CategoryController {
      */
     @GetMapping("/list")
     @ResponseBody
-    public Result list(@RequestParam Map<String, Object> params) {
-        if (StringUtils.isEmpty(params.get("page")) || StringUtils.isEmpty(params.get("limit"))) {
+    public Result list(Long current, Long size) {
+        if (current <= 0 || size <= 0) {
             return ResultGenerator.genFailResult("参数异常！");
         }
-        PageQueryUtil pageUtil = new PageQueryUtil(params);
-        return ResultGenerator.genSuccessResult(iCategoryService.getCategoryPage(pageUtil));
+
+        IPage p = new Page(current, size);
+        QueryWrapper<Category> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().orderByDesc(Category::getCreateTime);
+        IPage<Category> iPage = iCategoryService.page(p, queryWrapper);
+
+        return ResultGenerator.genSuccessResult(iPage);
     }
 
     /**
@@ -68,7 +75,11 @@ public class CategoryController {
             return ResultGenerator.genFailResult("参数异常！");
         }
 
-        Category category = Category.builder().categoryName(categoryName).build();
+        Category category = Category.builder()
+                .categoryName(categoryName)
+                .isDeleted(0)
+                .createTime(new Date())
+                .build();
         boolean saveFlag = iCategoryService.save(category);
         if (saveFlag) {
             return ResultGenerator.genSuccessResult();
@@ -92,7 +103,7 @@ public class CategoryController {
         if (iCategoryService.updateById(category)) {
             return ResultGenerator.genSuccessResult();
         } else {
-            return ResultGenerator.genFailResult("分类名称重复");
+            return ResultGenerator.genFailResult("修改失败");
         }
     }
 
