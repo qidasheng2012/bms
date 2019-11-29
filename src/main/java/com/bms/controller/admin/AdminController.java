@@ -1,12 +1,17 @@
 package com.bms.controller.admin;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.bms.entity.Admin;
-import com.bms.service.*;
+import com.bms.service.IAdminService;
+import com.bms.util.MD5Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -14,8 +19,13 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/admin")
 public class AdminController {
 
-    @Resource
+    @Autowired
     private IAdminService adminService;
+    @Autowired
+    private HttpServletRequest request;
+    @Autowired
+    private HttpSession session;
+
 
     @GetMapping({"/login"})
     public String login() {
@@ -29,27 +39,34 @@ public class AdminController {
     }
 
     @PostMapping(value = "/login")
-    public String login(@RequestParam("userName") String userName,
-                        @RequestParam("password") String password,
-                        @RequestParam("verifyCode") String verifyCode,
-                        HttpSession session) {
+    public String login(String userName, String password, String verifyCode) {
         if (StringUtils.isEmpty(verifyCode)) {
             session.setAttribute("errorMsg", "验证码不能为空");
             return "admin/login";
         }
-        if (StringUtils.isEmpty(userName) || StringUtils.isEmpty(password)) {
-            session.setAttribute("errorMsg", "用户名或密码不能为空");
+        if (StringUtils.isEmpty(userName)) {
+            session.setAttribute("errorMsg", "用户名不能为空");
             return "admin/login";
         }
-        String kaptchaCode = session.getAttribute("verifyCode") + "";
+        if (StringUtils.isEmpty(password)) {
+            session.setAttribute("errorMsg", "密码不能为空");
+            return "admin/login";
+        }
+
+        String kaptchaCode = String.valueOf(session.getAttribute("verifyCode"));
         if (StringUtils.isEmpty(kaptchaCode) || !verifyCode.equals(kaptchaCode)) {
             session.setAttribute("errorMsg", "验证码错误");
             return "admin/login";
         }
-        Admin adminUser = adminService.login(userName, password);
-        if (adminUser != null) {
-            session.setAttribute("loginUser", adminUser.getAdminNickName());
-            session.setAttribute("loginUserId", adminUser.getAdminId());
+
+        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("login_name", userName);
+        String passwordMd5 = MD5Util.MD5Encode(password, "UTF-8");
+        queryWrapper.eq("login_password", passwordMd5);
+        Admin user = adminService.getOne(queryWrapper);
+        if (user != null) {
+            session.setAttribute("loginUser", user.getAdminNickName());
+            session.setAttribute("loginUserId", user.getAdminId());
             //session过期时间设置为7200秒 即两小时
             //session.setMaxInactiveInterval(60 * 60 * 2);
             return "redirect:/admin/index";
@@ -60,31 +77,39 @@ public class AdminController {
     }
 
     @GetMapping("/profile")
-    public String profile(HttpServletRequest request) {
-        Long loginUserId = (long) request.getSession().getAttribute("loginUserId");
-        Admin adminUser = adminService.getUserDetailById(loginUserId);
-        if (adminUser == null) {
+    public String profile() {
+        Long id = (long) session.getAttribute("loginUserId");
+        Admin user = adminService.getById(id);
+        if (user == null) {
             return "admin/login";
         }
         request.setAttribute("path", "profile");
-        request.setAttribute("loginUserName", adminUser.getLoginName());
-        request.setAttribute("nickName", adminUser.getAdminNickName());
+        request.setAttribute("loginUserName", user.getLoginName());
+        request.setAttribute("nickName", user.getAdminNickName());
         return "admin/profile";
     }
 
     @PostMapping("/profile/password")
     @ResponseBody
-    public String passwordUpdate(HttpServletRequest request, @RequestParam("originalPassword") String originalPassword,
-                                 @RequestParam("newPassword") String newPassword) {
+    public String passwordUpdate(String originalPassword, String newPassword) {
         if (StringUtils.isEmpty(originalPassword) || StringUtils.isEmpty(newPassword)) {
             return "参数不能为空";
         }
-        Long loginUserId = (long) request.getSession().getAttribute("loginUserId");
-        if (adminService.updatePassword(loginUserId, originalPassword, newPassword)) {
+        Long id = (long) session.getAttribute("loginUserId");
+
+        Admin user = Admin.builder()
+                .loginPassword(MD5Util.MD5Encode(newPassword, "UTF-8"))
+                .build();
+
+        QueryWrapper<Admin> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("admin_id", id);
+        queryWrapper.eq("login_password", MD5Util.MD5Encode(originalPassword, "UTF-8"));
+        boolean updateFlag = adminService.update(user, queryWrapper);
+        if (updateFlag) {
             //修改成功后清空session中的数据，前端控制跳转至登录页
-            request.getSession().removeAttribute("loginUserId");
-            request.getSession().removeAttribute("loginUser");
-            request.getSession().removeAttribute("errorMsg");
+            session.removeAttribute("loginUserId");
+            session.removeAttribute("loginUser");
+            session.removeAttribute("errorMsg");
             return "success";
         } else {
             return "修改失败";
@@ -93,13 +118,20 @@ public class AdminController {
 
     @PostMapping("/profile/name")
     @ResponseBody
-    public String nameUpdate(HttpServletRequest request, @RequestParam("loginUserName") String loginUserName,
-                             @RequestParam("nickName") String nickName) {
+    public String nameUpdate(String loginUserName, String nickName) {
         if (StringUtils.isEmpty(loginUserName) || StringUtils.isEmpty(nickName)) {
             return "参数不能为空";
         }
-        Long loginUserId = (long) request.getSession().getAttribute("loginUserId");
-        if (adminService.updateName(loginUserId, loginUserName, nickName)) {
+        Long id = (long) session.getAttribute("loginUserId");
+
+        Admin admin = Admin.builder()
+                .adminId(id)
+                .loginName(loginUserName)
+                .adminNickName(nickName)
+                .build();
+
+        boolean updateFlag = adminService.updateById(admin);
+        if (updateFlag) {
             return "success";
         } else {
             return "修改失败";
@@ -107,10 +139,10 @@ public class AdminController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpServletRequest request) {
-        request.getSession().removeAttribute("loginUserId");
-        request.getSession().removeAttribute("loginUser");
-        request.getSession().removeAttribute("errorMsg");
+    public String logout() {
+        session.removeAttribute("loginUserId");
+        session.removeAttribute("loginUser");
+        session.removeAttribute("errorMsg");
         return "admin/login";
     }
 }
