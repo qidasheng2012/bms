@@ -1,11 +1,12 @@
 package com.bms.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bms.entity.News;
 import com.bms.util.PageQueryUtil;
 
 import java.util.List;
 
-public interface NewsMapper {
+public interface NewsMapper extends BaseMapper<News> {
     int deleteByPrimaryKey(Long newsId);
 
     int insert(News record);

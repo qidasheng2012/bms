@@ -1,6 +1,6 @@
 package com.bms.controller.admin;
 
-import com.bms.service.CommentService;
+import com.bms.service.INewsCommentService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class CommentController {
 
     @Resource
-    private CommentService commentService;
+    private INewsCommentService commentService;
 
     @GetMapping
     public String list(HttpServletRequest request) {

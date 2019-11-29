@@ -1,8 +1,9 @@
 package com.bms.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.bms.entity.Admin;
 
-public interface AdminService {
+public interface IAdminService extends IService<Admin> {
 
     Admin login(String userName, String password);
 

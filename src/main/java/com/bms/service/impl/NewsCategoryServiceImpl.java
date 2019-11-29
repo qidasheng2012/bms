@@ -1,8 +1,9 @@
 package com.bms.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bms.dao.NewsCategoryMapper;
 import com.bms.entity.NewsCategory;
-import com.bms.service.CategoryService;
+import com.bms.service.INewsCategoryService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryServiceImpl implements CategoryService {
+public class NewsCategoryServiceImpl extends ServiceImpl<NewsCategoryMapper, NewsCategory> implements INewsCategoryService {
 
     @Autowired
     private NewsCategoryMapper newsCategoryMapper;

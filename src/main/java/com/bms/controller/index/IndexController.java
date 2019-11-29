@@ -2,8 +2,8 @@ package com.bms.controller.index;
 
 import com.bms.entity.News;
 import com.bms.entity.NewsComment;
-import com.bms.service.CommentService;
-import com.bms.service.NewsService;
+import com.bms.service.INewsCommentService;
+import com.bms.service.INewsService;
 import com.bms.util.AntiXssUtils;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
@@ -18,9 +18,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class IndexController {
     @Resource
-    private CommentService commentService;
+    private INewsCommentService commentService;
     @Resource
-    private NewsService newsService;
+    private INewsService newsService;
 
     /**
      * 详情页

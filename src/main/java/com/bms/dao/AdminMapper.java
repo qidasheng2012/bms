@@ -1,9 +1,10 @@
 package com.bms.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bms.entity.Admin;
 import org.apache.ibatis.annotations.Param;
 
-public interface AdminMapper {
+public interface AdminMapper extends BaseMapper<Admin> {
     int deleteByPrimaryKey(Byte adminId);
 
     int insert(Admin record);

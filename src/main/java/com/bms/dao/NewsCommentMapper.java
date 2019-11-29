@@ -1,11 +1,12 @@
 package com.bms.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bms.entity.NewsComment;
 
 import java.util.List;
 import java.util.Map;
 
-public interface NewsCommentMapper {
+public interface NewsCommentMapper extends BaseMapper<NewsComment> {
     int insert(NewsComment record);
 
     int insertSelective(NewsComment record);

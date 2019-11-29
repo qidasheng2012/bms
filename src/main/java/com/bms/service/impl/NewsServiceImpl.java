@@ -1,8 +1,9 @@
 package com.bms.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bms.dao.NewsMapper;
 import com.bms.entity.News;
-import com.bms.service.NewsService;
+import com.bms.service.INewsService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
-public class NewsServiceImpl implements NewsService {
+public class NewsServiceImpl extends ServiceImpl<NewsMapper, News> implements INewsService {
 
     @Autowired
     private NewsMapper newsMapper;

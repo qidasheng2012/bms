@@ -1,8 +1,8 @@
 package com.bms.controller.admin;
 
 import com.bms.entity.News;
-import com.bms.service.CategoryService;
-import com.bms.service.NewsService;
+import com.bms.service.INewsCategoryService;
+import com.bms.service.INewsService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.Result;
 import com.bms.util.ResultGenerator;
@@ -22,9 +22,9 @@ import java.util.Map;
 public class NewsController {
 
     @Resource
-    private NewsService newsService;
+    private INewsService newsService;
     @Resource
-    private CategoryService categoryService;
+    private INewsCategoryService categoryService;
 
     @GetMapping
     public String list(HttpServletRequest request) {

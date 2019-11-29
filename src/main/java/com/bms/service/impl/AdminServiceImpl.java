@@ -1,16 +1,17 @@
 package com.bms.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bms.dao.AdminMapper;
 import com.bms.entity.Admin;
-import com.bms.service.AdminService;
+import com.bms.service.IAdminService;
 import com.bms.util.MD5Util;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
-
 @Service
-public class AdminServiceImpl implements AdminService {
-    @Resource
+public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements IAdminService {
+
+    @Autowired
     private AdminMapper adminMapper;
 
     @Override

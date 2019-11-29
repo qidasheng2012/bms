@@ -7,6 +7,9 @@ import com.google.code.kaptcha.util.Config;
 
 import java.util.Properties;
 
+/**
+ * 验证码图片配置
+ */
 @Component
 public class KaptchaConfig {
     @Bean

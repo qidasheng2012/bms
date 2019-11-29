@@ -1,12 +1,13 @@
 package com.bms.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.bms.entity.NewsCategory;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.PageResult;
 
 import java.util.List;
 
-public interface CategoryService {
+public interface INewsCategoryService extends IService<NewsCategory> {
 
     List<NewsCategory> getAllCategories();
 

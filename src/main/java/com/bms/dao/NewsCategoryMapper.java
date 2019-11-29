@@ -1,11 +1,12 @@
 package com.bms.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.bms.entity.NewsCategory;
 import com.bms.util.PageQueryUtil;
 
 import java.util.List;
 
-public interface NewsCategoryMapper {
+public interface NewsCategoryMapper extends BaseMapper<NewsCategory> {
 
     List<NewsCategory> findCategoryList(PageQueryUtil pageUtil);
 

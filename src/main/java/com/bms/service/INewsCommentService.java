@@ -1,10 +1,11 @@
 package com.bms.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.bms.entity.NewsComment;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.PageResult;
 
-public interface CommentService {
+public interface INewsCommentService extends IService<NewsComment> {
     /**
      * 添加评论
      *

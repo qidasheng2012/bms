@@ -1,8 +1,9 @@
 package com.bms.service.impl;
 
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.bms.dao.NewsCommentMapper;
 import com.bms.entity.NewsComment;
-import com.bms.service.CommentService;
+import com.bms.service.INewsCommentService;
 import com.bms.util.PageQueryUtil;
 import com.bms.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CommentServiceImpl implements CommentService {
+public class NewsCommentServiceImpl extends ServiceImpl<NewsCommentMapper, NewsComment> implements INewsCommentService {
+
     @Autowired
     private NewsCommentMapper newsCommentMapper;
 

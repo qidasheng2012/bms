@@ -1,5 +1,8 @@
 package com.bms.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +15,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("tb_news_category")
 public class NewsCategory {
+    @TableId(type = IdType.AUTO)
     private Long categoryId;
 
     private String categoryName;
